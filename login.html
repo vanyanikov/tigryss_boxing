@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>tigryss_boxing - Вхід / Реєстрація</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f7f7f7;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      width: 320px;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    input[type="email"], input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #d12f2f;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #a12222;
+    }
+
+    .message {
+      margin-top: 15px;
+      font-size: 14px;
+      color: red;
+    }
+
+    .link {
+      margin-top: 15px;
+      display: block;
+      font-size: 14px;
+      color: #444;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Вхід в акаунт</h2>
+  <form id="login-form">
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="password" id="password" placeholder="Пароль" required />
+    <button type="submit">Увійти</button>
+  </form>
+  <div class="message" id="message"></div>
+  <div class="link" id="show-register">Немає акаунта? Зареєструватися</div>
+
+  <form id="register-form" style="display:none; margin-top:20px;">
+    <h2>Реєстрація</h2>
+    <input type="email" id="reg-email" placeholder="Email" required />
+    <input type="password" id="reg-password" placeholder="Пароль" required />
+    <button type="submit">Зареєструватися</button>
+  </form>
+  <div class="message" id="reg-message"></div>
+  <div class="link" id="show-login" style="display:none;">Вже маєте акаунт? Увійти</div>
+</div>
+
+<script>
+  const loginForm = document.getElementById('login-form');
+  const registerForm = document.getElementById('register-form');
+  const message = document.getElementById('message');
+  const regMessage = document.getElementById('reg-message');
+  const showRegisterLink = document.getElementById('show-register');
+  const showLoginLink = document.getElementById('show-login');
+
+  // Показать форму регистрации
+  showRegisterLink.addEventListener('click', () => {
+    loginForm.style.display = 'none';
+    registerForm.style.display = 'block';
+    showRegisterLink.style.display = 'none';
+    showLoginLink.style.display = 'block';
+    message.textContent = '';
+    regMessage.textContent = '';
+  });
+
+  // Показать форму входа
+  showLoginLink.addEventListener('click', () => {
+    loginForm.style.display = 'block';
+    registerForm.style.display = 'none';
+    showRegisterLink.style.display = 'block';
+    showLoginLink.style.display = 'none';
+    message.textContent = '';
+    regMessage.textContent = '';
+  });
+
+  // Регистрация нового пользователя
+  registerForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('reg-email').value.trim().toLowerCase();
+    const password = document.getElementById('reg-password').value;
+
+    let users = JSON.parse(localStorage.getItem('users')) || [];
+    if (users.find(u => u.email === email)) {
+      regMessage.textContent = 'Користувач з таким email вже існує.';
+      return;
+    }
+
+    if (password.length < 6) {
+      regMessage.textContent = 'Пароль повинен бути не менше 6 символів.';
+      return;
+    }
+
+    users.push({email, password});
+    localStorage.setItem('users', JSON.stringify(users));
+    regMessage.style.color = 'green';
+    regMessage.textContent = 'Реєстрація пройшла успішно. Тепер можете увійти.';
+    registerForm.reset();
+  });
+
+  // Вход пользователя
+  loginForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value.trim().toLowerCase();
+    const password = document.getElementById('password').value;
+
+    let users = JSON.parse(localStorage.getItem('users')) || [];
+    const user = users.find(u => u.email === email && u.password === password);
+
+    if (user) {
+      localStorage.setItem('loggedInUser', JSON.stringify(user));
+      message.style.color = 'green';
+      message.textContent = 'Вхід успішний. Перенаправляємо...';
+      setTimeout(() => {
+        window.location.href = 'website.html';
+      }, 1200);
+    } else {
+      message.style.color = 'red';
+      message.textContent = 'Невірний email або пароль.';
+    }
+  });
+</script>
+
+</body>
+</html>

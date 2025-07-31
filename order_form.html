@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Оформлення замовлення</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f3f3f3;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background-color: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+
+    input[type="text"], input[type="tel"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 12px;
+      background-color: #d12f2f;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .submit-btn:hover {
+      background-color: #b22222;
+      transform: scale(1.03);
+    }
+
+    .error {
+      color: red;
+      margin-bottom: 10px;
+    }
+
+    #success-block {
+      display: none;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .home-button {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #333;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      margin-top: 20px;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .home-button:hover {
+      background-color: #000;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Оформлення замовлення</h1>
+    <div id="error-message" class="error"></div>
+
+    <form id="order-form">
+      <label for="name">Ім'я</label>
+      <input type="text" id="name" required>
+
+      <label for="surname">Прізвище</label>
+      <input type="text" id="surname" required>
+
+      <label for="patronymic">По-батькові</label>
+      <input type="text" id="patronymic" required>
+
+      <label for="phone">Номер телефону</label>
+      <input type="tel" id="phone" required>
+
+      <label for="city">Місто</label>
+      <input type="text" id="city" required>
+
+      <label for="department">Номер відділення</label>
+      <input type="text" id="department" required>
+
+      <button type="submit" class="submit-btn">Оформити замовлення</button>
+    </form>
+
+    <div id="success-block">
+      <p><strong>Замовлення було подано в обробку, чекайте коли наші менеджери зв'яжуться з вами.</strong></p>
+      <a href="website.html" class="home-button">← Повернутися на головну</a>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('order-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value.trim();
+      const surname = document.getElementById('surname').value.trim();
+      const patronymic = document.getElementById('patronymic').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const city = document.getElementById('city').value.trim();
+      const department = document.getElementById('department').value.trim();
+      const errorMessage = document.getElementById('error-message');
+
+      if (!name || !surname || !patronymic || !phone || !city || !department) {
+        errorMessage.textContent = "Будь ласка, заповніть усі поля.";
+        return;
+      }
+
+      const containsDigits = (str) => /\d/.test(str);
+
+      if (containsDigits(name) || containsDigits(surname) || containsDigits(patronymic) || containsDigits(city)) {
+        errorMessage.textContent = "Ім'я, прізвище, по-батькові та місто не повинні містити цифри.";
+        return;
+      }
+
+      if (!/^\d+$/.test(phone) || !/^\d+$/.test(department)) {
+        errorMessage.textContent = "Номер телефону та номер відділення повинні містити лише цифри.";
+        return;
+      }
+
+      errorMessage.textContent = "";
+      document.getElementById('order-form').style.display = 'none';
+      document.getElementById('success-block').style.display = 'block';
+
+      const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+      orders.push({ name, surname, patronymic, phone, city, department });
+      localStorage.setItem('orders', JSON.stringify(orders));
+    });
+  </script>
+
+</body>
+</html>
