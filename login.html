@@ -130,11 +130,13 @@
 
     let users = JSON.parse(localStorage.getItem('users')) || [];
     if (users.find(u => u.email === email)) {
+      regMessage.style.color = 'red';
       regMessage.textContent = 'Користувач з таким email вже існує.';
       return;
     }
 
     if (password.length < 6) {
+      regMessage.style.color = 'red';
       regMessage.textContent = 'Пароль повинен бути не менше 6 символів.';
       return;
     }
@@ -160,7 +162,7 @@
       message.style.color = 'green';
       message.textContent = 'Вхід успішний. Перенаправляємо...';
       setTimeout(() => {
-        window.location.href = 'website.html';
+        window.location.href = 'index.html';
       }, 1200);
     } else {
       message.style.color = 'red';
