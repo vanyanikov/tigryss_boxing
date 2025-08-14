@@ -1,0 +1,24 @@
+<div id="ordersList"></div>
+<script>
+const user = JSON.parse(localStorage.getItem("currentUser"));
+fetch("my_orders.php?user_id=" + user.id)
+  .then(res => res.json())
+  .then(orders => {
+    const container = document.getElementById("ordersList");
+    if (orders.length === 0) {
+      container.innerHTML = "<p>Замовлень поки немає.</p>";
+      return;
+    }
+    orders.forEach(order => {
+      const div = document.createElement("div");
+      div.innerHTML = `
+        <h3>Замовлення №${order.id}</h3>
+        <p>Ім'я: ${order.first_name} ${order.last_name}</p>
+        <p>Місто: ${order.city}, № відділення: ${order.department_number}</p>
+        <ul>${order.items.map(i => `<li>${i.product_name} x${i.quantity}</li>`).join("")}</ul>
+        <hr>
+      `;
+      container.appendChild(div);
+    });
+  });
+</script>

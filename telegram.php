@@ -1,48 +1,36 @@
 <?php
-// === КОНФІГУРАЦІЯ ===
-$token = '7567416481:AAF48p4yWJPPbRNOal-x3_a_QkY68sOr-84';
-$chat_id = '1942917071';
+require_once __DIR__ . '/telegram_config.php';
 
-// === ДАНІ З ФОРМИ ===
-$name = $_POST['name'];
-$surname = $_POST['surname'];
-$patronymic = $_POST['patronymic'];
-$phone = $_POST['phone'];
-$city = $_POST['city'];
-$department = $_POST['department'];
-$items = $_POST['items'];
-$no_call = isset($_POST['no_call']) ? 'Так' : 'Ні';
+function sendTelegramMessage(string $text): array {
+    global $TELEGRAM_BOT_TOKEN, $TELEGRAM_CHAT_ID;
 
-// === ФОРМУЄМО ПОВІДОМЛЕННЯ ===
-$message = "🛒 НОВЕ ЗАМОВЛЕННЯ\n"
-  . "Ім'я: $name\n"
-  . "Прізвище: $surname\n"
-  . "По батькові: $patronymic\n"
-  . "Телефон: $phone\n"
-  . "Місто: $city\n"
-  . "Відділення: $department\n"
-  . "Замовлено: $items\n"
-  . "Без дзвінка: $no_call";
+    if (!$TELEGRAM_BOT_TOKEN || !$TELEGRAM_CHAT_ID || $TELEGRAM_BOT_TOKEN === 'YOUR_TELEGRAM_BOT_TOKEN') {
+        return ['ok' => false, 'error' => 'Не задан TELEGRAM_BOT_TOKEN/CHAT_ID'];
+    }
 
-// === ВІДПРАВКА В TELEGRAM ===
-$url = "https://api.telegram.org/bot$token/sendMessage";
-$data = [
-  'chat_id' => $chat_id,
-  'text' => $message,
-  'parse_mode' => 'HTML'
-];
+    $url  = "https://api.telegram.org/bot{$TELEGRAM_BOT_TOKEN}/sendMessage";
+    $data = [
+        'chat_id' => $TELEGRAM_CHAT_ID,
+        'text'    => $text,
+        'parse_mode' => 'HTML',
+        'disable_web_page_preview' => true
+    ];
 
-// CURL-запит
-$options = [
-  'http' => [
-    'method' => 'POST',
-    'header' => 'Content-Type: application/x-www-form-urlencoded',
-    'content' => http_build_query($data)
-  ]
-];
-$context = stream_context_create($options);
-file_get_contents($url, false, $context);
+    $ch = curl_init($url);
+    curl_setopt_array($ch, [
+        CURLOPT_POST => true,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => 15,
+        CURLOPT_HTTPHEADER => ['Content-Type: application/x-www-form-urlencoded'],
+        CURLOPT_POSTFIELDS => http_build_query($data)
+    ]);
+    $resp = curl_exec($ch);
+    $err  = curl_error($ch);
+    curl_close($ch);
 
-// === ВІДПРАВКА ВІДПОВІДІ САЙТУ ===
-header('Location: index.html'); // або дякуємо.html
-?>
+    if ($err) {
+        return ['ok' => false, 'error' => $err];
+    }
+    $json = json_decode($resp, true);
+    return is_array($json) ? $json : ['ok' => false, 'error' => 'Bad JSON'];
+}

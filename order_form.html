@@ -1,163 +1,120 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Оформлення замовлення</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f3f3f3;
-      margin: 0;
-      padding: 0;
-    }
-
-    .container {
-      max-width: 600px;
-      margin: 40px auto;
-      background-color: white;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: bold;
-    }
-
-    input[type="text"], input[type="tel"] {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 15px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-
-    .submit-btn {
-      width: 100%;
-      padding: 12px;
-      background-color: #d12f2f;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background-color 0.3s ease, transform 0.2s ease;
-    }
-
-    .submit-btn:hover {
-      background-color: #b22222;
-      transform: scale(1.03);
-    }
-
-    .error {
-      color: red;
-      margin-bottom: 10px;
-    }
-
-    #success-block {
-      display: none;
-      text-align: center;
-      margin-top: 20px;
-    }
-
-    .home-button {
-      display: inline-block;
-      padding: 10px 20px;
-      background-color: #333;
-      color: white;
-      text-decoration: none;
-      border-radius: 8px;
-      font-weight: bold;
-      margin-top: 20px;
-      transition: background-color 0.3s ease, transform 0.2s ease;
-    }
-
-    .home-button:hover {
-      background-color: #000;
-      transform: scale(1.05);
-    }
+    body { font-family: Arial, sans-serif; background:#f7f7f7; padding:20px; }
+    .card { max-width: 640px; margin: 0 auto; background:#fff; border-radius:10px; box-shadow:0 6px 22px rgba(0,0,0,.07); padding:18px; }
+    h1 { margin-bottom: 16px; }
+    label { display:block; margin:10px 0 6px; }
+    input, select, textarea { width:100%; padding:10px; border:1px solid #ddd; border-radius:6px; }
+    .row { display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
+    button { margin-top:14px; padding:10px 14px; background:#282828; color:#fff; border:0; border-radius:8px; cursor:pointer; }
+    .ok { background: #ebfff1; border:1px solid #bdf5cd; color:#1c7c3a; padding:10px; border-radius:6px; display:none; margin-top:10px; }
+    .err { background: #fff2f2; border:1px solid #ffd3d3; color:#a33; padding:10px; border-radius:6px; display:none; margin-top:10px; }
+    a { color:#282828; text-decoration:none; }
   </style>
 </head>
 <body>
-
-  <div class="container">
+  <div class="card">
+    <a href="index.html">← На головну</a>
     <h1>Оформлення замовлення</h1>
-    <div id="error-message" class="error"></div>
+    <form id="orderForm" method="post" action="save_order.php">
+      <label>Імʼя*</label>
+      <input name="name" required>
 
-    <form id="order-form">
-      <label for="name">Ім'я</label>
-      <input type="text" id="name" required>
+      <label>Телефон*</label>
+      <input name="phone" required placeholder="+380…">
 
-      <label for="surname">Прізвище</label>
-      <input type="text" id="surname" required>
+      <label>Товар*</label>
+      <input name="product" id="product" required>
 
-      <label for="patronymic">По-батькові</label>
-      <input type="text" id="patronymic" required>
+      <div class="row">
+        <div>
+          <label>Варіант</label>
+          <input name="variant" id="variant" placeholder="laces/velcro або колір">
+        </div>
+        <div>
+          <label>Розмір</label>
+          <select name="size" id="size">
+            <option value="">—</option>
+            <option>10 oz</option>
+            <option>12 oz</option>
+            <option>14 oz</option>
+            <option>16 oz</option>
+          </select>
+        </div>
+      </div>
 
-      <label for="phone">Номер телефону</label>
-      <input type="tel" id="phone" required>
+      <div class="row">
+        <div>
+          <label>Кількість</label>
+          <input type="number" min="1" value="1" name="quantity">
+        </div>
+        <div>
+          <label>Ціна</label>
+          <input type="number" min="0" step="0.01" value="0" name="price">
+        </div>
+      </div>
 
-      <label for="city">Місто</label>
-      <input type="text" id="city" required>
+      <label>Коментар</label>
+      <textarea name="notes" rows="3"></textarea>
 
-      <label for="department">Номер відділення</label>
-      <input type="text" id="department" required>
+      <!-- UTM (если есть) -->
+      <input type="hidden" name="utm_source">
+      <input type="hidden" name="utm_medium">
+      <input type="hidden" name="utm_campaign">
+      <input type="hidden" name="utm_term">
+      <input type="hidden" name="utm_content">
 
-      <button type="submit" class="submit-btn">Оформити замовлення</button>
+      <button type="submit">Відправити</button>
+
+      <div class="ok" id="okMsg">Замовлення відправлено! Дякуємо ❤️</div>
+      <div class="err" id="errMsg">Сталася помилка. Спробуйте пізніше.</div>
     </form>
-
-    <div id="success-block">
-      <p><strong>Замовлення було подано в обробку, чекайте коли наші менеджери зв'яжуться з вами.</strong></p>
-      <a href="index.html" class="home-button">← Повернутися на головну</a>
-    </div>
   </div>
 
   <script>
-    document.getElementById('order-form').addEventListener('submit', function(e) {
+    // Подхватываем product/variant/size из query string (с карточек)
+    const params = new URLSearchParams(location.search);
+    for (const k of ['product','variant','size']) {
+      if (params.get(k)) document.getElementById(k)?.setAttribute('value', params.get(k));
+      if (k === 'size' && params.get(k)) document.getElementById('size').value = params.get(k);
+    }
+
+    // Подхват UTM
+    const utmKeys = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'];
+    utmKeys.forEach(k => {
+      const el = document.querySelector(`input[name="${k}"]`);
+      if (el) el.value = params.get(k) || '';
+    });
+
+    // AJAX-отправка, чтобы оставаться на странице
+    const form = document.getElementById('orderForm');
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-
-      const name = document.getElementById('name').value.trim();
-      const surname = document.getElementById('surname').value.trim();
-      const patronymic = document.getElementById('patronymic').value.trim();
-      const phone = document.getElementById('phone').value.trim();
-      const city = document.getElementById('city').value.trim();
-      const department = document.getElementById('department').value.trim();
-      const errorMessage = document.getElementById('error-message');
-
-      if (!name || !surname || !patronymic || !phone || !city || !department) {
-        errorMessage.textContent = "Будь ласка, заповніть усі поля.";
-        return;
+      const ok = document.getElementById('okMsg');
+      const err = document.getElementById('errMsg');
+      ok.style.display = 'none';
+      err.style.display = 'none';
+      try {
+        const resp = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form)
+        });
+        const json = await resp.json();
+        if (json.ok) {
+          ok.style.display = 'block';
+          form.reset();
+        } else {
+          err.style.display = 'block';
+        }
+      } catch (_) {
+        err.style.display = 'block';
       }
-
-      const containsDigits = (str) => /\d/.test(str);
-
-      if (containsDigits(name) || containsDigits(surname) || containsDigits(patronymic) || containsDigits(city)) {
-        errorMessage.textContent = "Ім'я, прізвище, по-батькові та місто не повинні містити цифри.";
-        return;
-      }
-
-      if (!/^\d+$/.test(phone) || !/^\d+$/.test(department)) {
-        errorMessage.textContent = "Номер телефону та номер відділення повинні містити лише цифри.";
-        return;
-      }
-
-      errorMessage.textContent = "";
-      document.getElementById('order-form').style.display = 'none';
-      document.getElementById('success-block').style.display = 'block';
-
-      const orders = JSON.parse(localStorage.getItem('orders') || '[]');
-      orders.push({ name, surname, patronymic, phone, city, department });
-      localStorage.setItem('orders', JSON.stringify(orders));
     });
   </script>
-
 </body>
 </html>

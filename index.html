@@ -5,116 +5,132 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>tigryss_boxing</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
+    * {
       margin: 0;
-      background-color: #f7f7f7;
+      padding: 0;
+      box-sizing: border-box;
     }
-
+    body, html {
+      width: 100%;
+      font-family: 'Montserrat', sans-serif;
+    }
     header {
-      background-color: #222;
+      background-color: rgb(40, 40, 40);
       color: white;
-      padding: 10px;
-      text-align: center;
+      padding: 10px 20px;
+      border-bottom: 2px solid rgb(40, 40, 40);
+      height: 90px;
+      width: 100%;
     }
-
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .logo {
+      height: 60px; 
+    }
+    header h1 {
+      margin: 0;
+      font-size: 32px;
+      color: white;
+      user-select: none;
+    }
     nav {
+      background-color: rgb(40, 40, 40);
+      border-bottom: 2px solid black;
       display: flex;
       justify-content: center;
-      gap: 20px;
-      background-color: #444;
-      padding: 10px;
+      padding: 10px 0;
     }
-
     nav a {
       color: white;
       text-decoration: none;
-      font-weight: bold;
-      transition: background-color 0.3s ease, transform 0.3s ease;
-      padding: 6px 12px;
-      border-radius: 6px;
-      display: inline-block;
+      margin: 0 15px;
+      padding: 10px 16px;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+      cursor: pointer;
+      user-select: none;
     }
-
     nav a:hover {
-      background-color: black;
-      transform: scale(1.05);
+      background-color: gray;
     }
-
+    nav a.active {
+      background-color: gray;
+    }
     main {
       padding: 20px;
+      min-height: 80vh;
+      max-width: 1200px;
+      margin: 0 auto;
     }
-
-    .product-grid {
+    #home-products {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      grid-template-columns: repeat(4, 1fr);
       gap: 30px;
+      padding: 0 20px;
+      box-sizing: border-box;
+      justify-items: center;
     }
-
     .product-card {
+      width: 280px;
       background-color: white;
       border-radius: 10px;
       padding: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       text-align: center;
-      transition: background-color 0.3s ease, transform 0.3s ease;
       cursor: pointer;
       color: black;
+      user-select: none;
+      transition: background-color 0.3s ease;
     }
-
     .product-card:hover {
       background-color: black;
-      transform: scale(1.05);
       color: white;
     }
-
     .product-card img {
-      width: 100%;
-      height: auto;
+      width: 280px;
+      height: 280px;
+      object-fit: cover;
       border-radius: 8px;
       transition: transform 0.3s ease;
     }
-
     .product-card:hover img {
       transform: scale(1.1);
     }
-
     .product-card h3 {
       margin: 10px 0 0;
       font-size: 18px;
-      transition: color 0.3s ease;
+      user-select: none;
     }
-
     .product-card:hover h3 {
       color: white;
     }
-
-    .order-button {
-      display: inline-block;
+    .order-button, .cart-order-button {
       margin-top: 8px;
       padding: 8px 16px;
       background-color: #d12f2f;
       color: white;
-      text-decoration: none;
+      border: none;
       border-radius: 5px;
       font-weight: bold;
-      transition: background-color 0.3s ease, transform 0.3s ease;
       cursor: pointer;
+      font-size: 14px;
       user-select: none;
+      transition: background-color 0.3s ease;
     }
-
-    .order-button:hover {
+    .order-button:hover, .cart-order-button:hover {
       background-color: #a12222;
-      transform: scale(1.1);
     }
-
-    /* Заказы */
-    #orders-list {
+    #cart-list {
       max-width: 600px;
       margin: 0 auto;
     }
-
-    .order-item {
+    .cart-item {
       position: relative;
       padding: 12px 50px 12px 16px;
       margin-bottom: 12px;
@@ -122,13 +138,12 @@
       border-radius: 8px;
       box-shadow: 0 1px 4px rgba(0,0,0,0.1);
       font-size: 16px;
+      user-select: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-
     .delete-button {
-      position: absolute;
-      top: 50%;
-      right: 12px;
-      transform: translateY(-50%);
       background-color: #d12f2f;
       color: white;
       border: none;
@@ -137,14 +152,12 @@
       font-weight: bold;
       cursor: pointer;
       transition: transform 0.3s ease, background-color 0.3s ease;
+      user-select: none;
     }
-
     .delete-button:hover {
       background-color: #a12222;
       transform: scale(1.1);
     }
-
-    /* Форма заказа (модальное окно) */
     .modal {
       display: none;
       position: fixed;
@@ -155,7 +168,6 @@
       justify-content: center;
       align-items: center;
     }
-
     .modal-content {
       background: white;
       padding: 20px;
@@ -164,8 +176,8 @@
       width: 90%;
       box-shadow: 0 0 10px rgba(0,0,0,0.25);
       position: relative;
+      user-select: none;
     }
-
     .modal-close {
       position: absolute;
       top: 10px; right: 10px;
@@ -174,15 +186,15 @@
       font-weight: bold;
       background: none;
       border: none;
+      user-select: none;
     }
-
     form label {
       display: block;
       margin-bottom: 6px;
       font-weight: bold;
       font-size: 16px;
+      user-select: none;
     }
-
     form input {
       width: 100%;
       padding: 8px;
@@ -191,13 +203,11 @@
       border-radius: 5px;
       font-size: 15px;
     }
-
     form input:focus {
       outline: none;
       border-color: #d12f2f;
       box-shadow: 0 0 5px rgba(209,47,47,0.5);
     }
-
     form button {
       background-color: #d12f2f;
       color: white;
@@ -209,21 +219,20 @@
       transition: background-color 0.3s ease, transform 0.3s ease;
       width: 100%;
       font-size: 16px;
+      user-select: none;
     }
-
     form button:hover {
       background-color: #a12222;
       transform: scale(1.05);
     }
-
     .error-message {
       color: #d12f2f;
       margin-bottom: 12px;
       font-weight: bold;
       font-size: 14px;
       display: none;
+      user-select: none;
     }
-
     .success-message {
       color: green;
       margin-bottom: 12px;
@@ -231,9 +240,8 @@
       font-size: 14px;
       display: none;
       text-align: center;
+      user-select: none;
     }
-
-    /* Авторизация */
     #auth form {
       max-width: 350px;
       margin: 0 auto;
@@ -241,14 +249,13 @@
       padding: 20px;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.15);
+      user-select: none;
     }
-
     #auth label {
       font-weight: bold;
       display: block;
       margin-bottom: 5px;
     }
-
     #auth input {
       width: 100%;
       padding: 8px;
@@ -256,7 +263,6 @@
       border: 1px solid #ccc;
       border-radius: 5px;
     }
-
     #auth button {
       width: 100%;
       background-color: #d12f2f;
@@ -267,26 +273,25 @@
       font-weight: bold;
       cursor: pointer;
       transition: background-color 0.3s ease;
+      user-select: none;
     }
-
     #auth button:hover {
       background-color: #a12222;
     }
-
     #auth .error-message {
       color: #d12f2f;
       margin-bottom: 12px;
       font-weight: bold;
       font-size: 14px;
+      display: none;
     }
-
     #auth .success-message {
       color: green;
       margin-bottom: 12px;
       font-weight: bold;
       font-size: 14px;
+      display: none;
     }
-
     #auth .toggle-password {
       margin-bottom: 15px;
       cursor: pointer;
@@ -295,490 +300,710 @@
       user-select: none;
       display: inline-block;
     }
-
     #auth .logged-in-info {
       text-align: center;
       margin-bottom: 15px;
       font-weight: bold;
       color: green;
+      user-select: none;
     }
-
     #auth .logout-button {
       background-color: #a12222;
       margin-top: 10px;
       width: 100%;
+      user-select: none;
     }
+    .delete-order {
+  margin-top: 10px;
+  padding: 5px 10px;
+  background-color: #ff4444;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.bg-left, .bg-right {
+  position: fixed;
+  top: 0;
+  width: 700px;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-size: contain;
+  z-index: -1;
+  opacity: 0.2; /* можно настроить прозрачность */
+  pointer-events: none; /* чтобы не мешали кликам */
+}
+
+.bg-left {
+  left: 0;
+  background-image: url('images/leftside_tiger.png');
+}
+
+.bg-right {
+  right: 0;
+  background-image: url('images/rightside_tiger.png');
+}
+
 
   </style>
 </head>
 <body>
+  <div class="bg-left"></div>
+  <div class="bg-right"></div>
 
-  <header>
+<header>
+  <a href="#" id="logo-link" class="header-left">
+    <img src="images/tigryss_logo.png" alt="Tigryss Logo" class="logo" />
     <h1>tigryss_boxing</h1>
-  </header>
+  </a>
+</header>
 
-  <nav>
-    <a href="#home" onclick="showTab('home')">Головна</a>
-    <a href="#cart" onclick="showTab('cart')">Мої замовлення</a>
-    <a href="#inventory" onclick="showTab('inventory')">Інвентар</a>
-    <a href="#auth" onclick="showTab('auth')">Авторизація</a>
-  </nav>
+<nav>
+  <a href="#" data-tab="home" class="active">Головна</a>
+  <a href="#" data-tab="cart">Корзина</a>
+  <a href="#" data-tab="orders">Мої замовлення</a>
+  <a href="#" data-tab="inventory">Інвентар</a>
+  <a href="#" data-tab="auth">Авторизація</a>
+</nav>
 
-  <main>
-    <section id="home">
-      <h2>Моделі боксерських рукавиць</h2>
-      <div id="home-products" class="product-grid">
-        <!-- Товари тут -->
+<main>
+  <section id="home" class="tab-section">
+    <h2>Боксерські рукавиці</h2>
+    <div id="home-products"></div>
+  </section>
+
+  <section id="cart" class="tab-section" style="display:none;">
+    <h2>Корзина</h2>
+    <div id="cart-list"><p>Корзина порожня.</p></div>
+    <button id="cart-checkout-btn" style="display:none;">Оформити замовлення</button>
+  </section>
+
+  <section id="orders" class="tab-section" style="display:none;">
+    <h2>Мої замовлення</h2>
+    <div id="orders-list"><p>Немає оформлених замовлень.</p></div>
+  </section>
+
+  <section id="inventory" class="tab-section" style="display:none;">
+    <h2>Інвентар</h2>
+    <p>Інші товари будуть додані пізніше 🧤</p>
+  </section>
+
+  <section id="auth" class="tab-section" style="display:none;">
+    <h2>Авторизація</h2>
+    <div id="auth-content">
+      <div class="logged-in-info" style="display:none;">
+        Ви увійшли як: <span id="user-email-display"></span>
+        <button class="logout-button" id="logout-btn">Вийти</button>
       </div>
-    </section>
 
-    <section id="cart" style="display:none;">
-      <h2>Мої замовлення</h2>
-      <div id="orders-list">
-        <p>Завантаження замовлень...</p>
-      </div>
-    </section>
+      <form id="login-form">
+        <div class="error-message" id="login-error"></div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" required />
+        <label for="password">Пароль:</label>
+        <input type="password" id="password" required />
+        <span class="toggle-password" id="toggle-password">Показати пароль</span>
+        <button type="submit">Увійти</button>
+        <p style="margin-top: 12px;">
+          <a href="#" id="forgot-password-link">Забули пароль?</a>
+        </p>
+      </form>
 
-    <section id="inventory" style="display:none;">
-      <h2>Інвентар</h2>
-      <p>Інші товари будуть додані пізніше 🧤</p>
-    </section>
-
-    <section id="auth" style="display:none;">
-      <h2>Авторизація</h2>
-      <div id="auth-content">
-        <!-- Если пользователь авторизован, покажем инфо и кнопку выхода -->
-        <div class="logged-in-info" style="display:none;">
-          Ви увійшли як: <span id="user-email-display"></span>
-          <button class="logout-button" id="logout-btn">Вийти</button>
-        </div>
-
-        <!-- Форма логина -->
-        <form id="login-form">
-          <div class="error-message" id="login-error"></div>
-          <label for="email">Email:</label>
-          <input type="email" id="email" required />
-          <label for="password">Пароль:</label>
-          <input type="password" id="password" required />
-          <span class="toggle-password" id="toggle-password">Показати пароль</span>
-          <button type="submit">Увійти</button>
-          <p style="margin-top: 12px;">
-            <a href="#" id="forgot-password-link">Забули пароль?</a>
-          </p>
-        </form>
-
-        <!-- Форма восстановления пароля -->
-        <form id="forgot-password-form" style="display:none;">
-          <div class="error-message" id="forgot-error"></div>
-          <div class="success-message" id="forgot-success"></div>
-          <label for="forgot-email">Введіть свій Email для відновлення пароля:</label>
-          <input type="email" id="forgot-email" required />
-          <button type="submit">Відновити пароль</button>
-          <p style="margin-top: 12px;">
-            <a href="#" id="back-to-login-link">Повернутись до входу</a>
-          </p>
-        </form>
-      </div>
-    </section>
-  </main>
-
-  <!-- Модальное окно заказа -->
-  <div id="order-modal" class="modal">
-    <div class="modal-content">
-      <button class="modal-close" id="close-order-modal">&times;</button>
-      <h3>Оформлення замовлення</h3>
-      <div class="error-message" id="order-error"></div>
-      <div class="success-message" id="order-success"></div>
-      <form id="order-form">
-        <input type="hidden" id="order-product" />
-        <label for="order-name">Ім'я:</label>
-        <input type="text" id="order-name" required />
-        <label for="order-surname">Прізвище:</label>
-        <input type="text" id="order-surname" required />
-        <label for="order-patronymic">По-батькові:</label>
-        <input type="text" id="order-patronymic" required />
-        <label for="order-phone">Номер телефону:</label>
-        <input type="text" id="order-phone" required />
-        <label for="order-city">Місто:</label>
-        <input type="text" id="order-city" required />
-        <label for="order-branch">Номер відділення:</label>
-        <input type="text" id="order-branch" required />
-        <button type="submit">Підтвердити замовлення</button>
+      <form id="forgot-password-form" style="display:none;">
+        <div class="error-message" id="forgot-error"></div>
+        <div class="success-message" id="forgot-success"></div>
+        <label for="forgot-email">Введіть свій Email для відновлення пароля:</label>
+        <input type="email" id="forgot-email" required />
+        <label for="forgot-password">Новий пароль (імітація):</label>
+        <input type="password" id="forgot-password" />
+        <span class="toggle-password" id="toggle-password-forgot">Показати пароль</span>
+        <button type="submit">Відновити пароль</button>
+        <p style="margin-top: 12px;">
+          <a href="#" id="back-to-login-link">Повернутись до входу</a>
+        </p>
       </form>
     </div>
+  </section>
+</main>
+
+<div id="order-modal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <button class="modal-close" id="close-order-modal">&times;</button>
+    <h3>Оформлення замовлення</h3>
+    <div class="error-message" id="order-error"></div>
+    <div class="success-message" id="order-success"></div>
+    <form id="order-form">
+      <label for="order-name">Ім'я:</label>
+      <input type="text" id="order-name" required />
+      <label for="order-surname">Прізвище:</label>
+      <input type="text" id="order-surname" required />
+      <label for="order-patronymic">По-батькові:</label>
+      <input type="text" id="order-patronymic" required />
+      <label for="order-phone">Номер телефону:</label>
+      <input type="text" id="order-phone" required />
+      <label for="order-city">Місто:</label>
+      <input type="text" id="order-city" required />
+      <label for="order-branch">Номер відділення:</label>
+      <input type="text" id="order-branch" required />
+      <button type="submit">Підтвердити замовлення</button>
+    </form>
   </div>
+</div>
 
-  <script>
-    // === Данные продуктов ===
-    const products = [
-      {
-        id: 'black_velcro',
-        title: 'Winning чорні на липучці',
-        img: 'images/black_velcro.jpg'
-      },
-      {
-        id: 'grant_black_laces',
-        title: 'Grant чорні на шнурках',
-        img: 'images/grant_black_laces.jpg'
-      },
-      {
-        id: 'metallic_laces',
-        title: 'Winning срібні на шнурках',
-        img: 'images/metallic_laces.jpg'
-      },
-      {
-        id: 'white_velcro',
-        title: 'Winning білі на липучці',
-        img: 'images/white_velcro.jpg'
-      },
-      {
-        id: 'yellow_laces',
-        title: 'Winning жовті на шнурках',
-        img: 'images/yellow_laces.jpg'
-      },
-      {
-        id: 'gray_laces',
-        title: 'Winning сірі на шнурках',
-        img: 'images/gray_laces.jpg'
-      },
-      {
-        id: 'white_laces',
-        title: 'Winning білі на шнурках',
-        img: 'images/white_laces.jpg'
-      }
-    ];
+<script>
+const products = [
+  { id: 1, name: 'Чорні на липучці', image: 'images/black_velcro-removebg-preview.png'},
+  { id: 2, name: 'Grant на шнурках', image: 'images/grant_black_laces.jpg' },
+  { id: 3, name: 'Winning сірі на шнурках', image: 'images/gray_laces.jpg' },
+  { id: 4, name: 'Winning срібні на шнурках', image: 'images/metallic_laces.jpg' },
+  { id: 5, name: 'Winning білі на шнурках', image: 'images/white_laces.png' },
+  { id: 6, name: 'Winning білі на липучці', image: 'images/white_velcro.png' },
+  { id: 7, name: 'Winning жовті на шнурках', image: 'images/yellow_laces.jpg' },
+  { id: 8, name: 'Чорні на шнурках', image: 'images/black_laces.png' }, 
+  { id: 9, name: 'Захисний шолом', image: 'images/helmet_1.png' }        
+];
 
-    // === Переключение вкладок ===
-    function showTab(tabId) {
-      document.querySelectorAll("main > section").forEach(s => s.style.display = "none");
-      document.getElementById(tabId).style.display = "block";
+const fileMap = {
+  'Чорні на липучці': 'boxing_gloves/product_black_velcro.html',
+  'Grant на шнурках': 'boxing_gloves/product_grant_black_laces.html',
+  'Winning сірі на шнурках': 'boxing_gloves/product_gray_laces.html',
+  'Winning срібні на шнурках': 'boxing_gloves/product_metallic_laces.html',
+  'Winning білі на шнурках': 'boxing_gloves/product_white_laces.html',
+  'Winning білі на липучці': 'boxing_gloves/product_white_velcro.html',
+  'Winning жовті на шнурках': 'boxing_gloves/product_yellow_laces.html',
+  'Чорні на шнурках': 'boxing_gloves/product_black_laces.html', 
+  'Захисний шолом': 'boxing_gloves/product_helmet.html'                 
+};
 
-      if(tabId === 'cart') {
-        loadOrders();
-      }
-      if(tabId === 'auth') {
-        updateAuthUI();
-      }
-    }
+function displayHome() {
+  const homeProducts = document.getElementById('home-products');
+  homeProducts.innerHTML = '';
 
-    // === Отображение продуктов на главной ===
-    function displayHome() {
-      const wrapper = document.getElementById('home-products');
-      wrapper.innerHTML = products.map(p => `
-        <div class="product-card" data-id="${p.id}">
-          <a href="boxing gloves/product_${p.id}.html">
-            <img src="${p.img}" alt="${p.title}">
-            <h3>${p.title}</h3>
-          </a>
-          <button class="order-button" data-id="${p.id}">Оформити замовлення</button>
-        </div>
-      `).join('');
+  products.forEach(product => {
+    const card = document.createElement('div');
+    card.className = 'product-card';
 
-      // Навешиваем события на кнопки "Оформити замовлення"
-      document.querySelectorAll('.order-button').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const currentUser = localStorage.getItem('currentUser');
-          if (!currentUser) {
-            alert('Будь ласка, увійдіть в акаунт, щоб оформити замовлення.');
-            showTab('auth');
-            return;
-          }
-          openOrderModal(btn.getAttribute('data-id'));
-        });
+    const productPage = fileMap[product.name] || '#';
+
+    card.innerHTML = `
+      <a href="${productPage}" style="text-decoration:none; color:inherit;">
+        <img src="${product.image}" alt="${product.name}" style="width:100%; max-width:300px;" />
+        <h3>${product.name}</h3>
+      </a>
+
+      <div class="size-selector">
+        <label><input type="radio" name="size-${product.id}" value="10oz"> 10oz</label>
+        <label><input type="radio" name="size-${product.id}" value="12oz"> 12oz</label>
+        <label><input type="radio" name="size-${product.id}" value="14oz"> 14oz</label>
+        <label><input type="radio" name="size-${product.id}" value="16oz"> 16oz</label>
+      </div>
+
+      <button class="order-button" data-id="${product.id}" disabled>Оформити замовлення</button>
+    `;
+
+    const orderButton = card.querySelector('.order-button');
+    const sizeRadios = card.querySelectorAll(`input[name="size-${product.id}"]`);
+
+    sizeRadios.forEach(radio => {
+      radio.addEventListener('change', () => {
+        orderButton.disabled = false;
       });
+    });
+
+    orderButton.addEventListener('click', () => {
+      const selectedSize = Array.from(sizeRadios).find(r => r.checked)?.value;
+      if (!selectedSize) {
+        alert('Будь ласка, виберіть розмір перед оформленням замовлення.');
+        return;
+      }
+
+      addToCart({ ...product, size: selectedSize });
+      showTab('cart');
+    });
+
+    homeProducts.appendChild(card);
+  });
+}
+
+
+function addToCart(product, size) {
+  let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  const index = cart.findIndex(item => item.id === product.id && item.size === size);
+  if (index >= 0) {
+    cart[index].quantity++;
+  } else {
+    cart.push({ id: product.id, name: product.name, quantity: 1, size });
+  }
+  localStorage.setItem('cart', JSON.stringify(cart));
+  displayCart();
+}
+
+
+
+  // Валидация полей
+  function isValidName(str) {
+    return /^[A-Za-zА-Яа-яЁёЇїІіЄєҐґ\s'-]+$/.test(str.trim());
+  }
+
+  function isValidNumber(str) {
+    return /^[0-9]+$/.test(str.trim());
+  }
+
+  // Обработка модалки заказа
+  const orderModal = document.getElementById('order-modal');
+  const closeOrderModalBtn = document.getElementById('close-order-modal');
+  const orderForm = document.getElementById('order-form');
+  const errElem = document.getElementById('order-error');
+  const successElem = document.getElementById('order-success');
+
+  function openOrderModal() {
+    orderModal.style.display = 'flex';
+    errElem.style.display = 'none';
+    successElem.style.display = 'none';
+    orderForm.reset();
+  }
+  function closeOrderModal() {
+    orderModal.style.display = 'none';
+  }
+  closeOrderModalBtn.addEventListener('click', closeOrderModal);
+  orderModal.addEventListener('click', e => {
+    if (e.target === orderModal) closeOrderModal();
+  });
+
+  orderForm.addEventListener('submit', e => {
+    e.preventDefault();
+    errElem.style.display = 'none';
+    successElem.style.display = 'none';
+
+    const name = document.getElementById('order-name').value.trim();
+    const surname = document.getElementById('order-surname').value.trim();
+    const patronymic = document.getElementById('order-patronymic').value.trim();
+    const phone = document.getElementById('order-phone').value.trim();
+    const city = document.getElementById('order-city').value.trim();
+    const branch = document.getElementById('order-branch').value.trim();
+
+    if (!isValidName(name)) {
+      errElem.textContent = "Поле 'Ім\'я' має містити лише літери.";
+      errElem.style.display = 'block';
+      return;
+    }
+    if (!isValidName(surname)) {
+      errElem.textContent = "Поле 'Прізвище' має містити лише літери.";
+      errElem.style.display = 'block';
+      return;
+    }
+    if (!isValidName(patronymic)) {
+      errElem.textContent = "Поле 'По-батькові' має містити лише літери.";
+      errElem.style.display = 'block';
+      return;
+    }
+    if (!isValidName(city)) {
+      errElem.textContent = "Поле 'Місто' має містити лише літери.";
+      errElem.style.display = 'block';
+      return;
+    }
+    if (!isValidNumber(phone)) {
+      errElem.textContent = "Поле 'Номер телефону' має містити лише цифри.";
+      errElem.style.display = 'block';
+      return;
+    }
+    if (phone.length < 7) {
+      errElem.textContent = "Номер телефону повинен містити щонайменше 7 цифр.";
+      errElem.style.display = 'block';
+      return;
+    }
+    if (!isValidNumber(branch)) {
+      errElem.textContent = "Поле 'Номер відділення' має містити лише цифри.";
+      errElem.style.display = 'block';
+      return;
     }
 
-    // === Модальное окно заказа ===
-    const orderModal = document.getElementById('order-modal');
-    const closeOrderBtn = document.getElementById('close-order-modal');
-
-    function openOrderModal(productId) {
-      // Заполняем скрытое поле названием продукта
-      const product = products.find(p => p.id === productId);
-      document.getElementById('order-product').value = product.title;
-
-      // Очищаем форму и сообщения
-      document.getElementById('order-form').reset();
-      document.getElementById('order-error').style.display = 'none';
-      document.getElementById('order-error').textContent = '';
-      document.getElementById('order-success').style.display = 'none';
-      document.getElementById('order-success').textContent = '';
-
-      orderModal.style.display = 'flex';
+    // Проверяем авторизацию
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (!currentUser) {
+      alert('Будь ласка, увійдіть в акаунт, щоб оформити замовлення.');
+      closeOrderModal();
+      showTab('auth');
+      return;
     }
 
-    function closeOrderModal() {
-      orderModal.style.display = 'none';
+    // Получаем корзину
+    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    if (cart.length === 0) {
+      errElem.textContent = 'Корзина порожня. Додайте товари перед оформленням.';
+      errElem.style.display = 'block';
+      return;
     }
 
-    closeOrderBtn.addEventListener('click', closeOrderModal);
+  const order = {
+    id: Date.now(),
+    products: cart.map(item => ({ id: item.id, name: item.name, quantity: item.quantity, size: item.size })),
+    name,
+    surname,
+    patronymic,
+    phone,
+    city,
+    branch,
+    userEmail: currentUser.email
+  };
 
-    window.addEventListener('click', e => {
-      if (e.target === orderModal) {
-        closeOrderModal();
+  console.log('Додаємо замовлення:', order); // <-- сюда
+
+  const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+  orders.push(order);
+  localStorage.setItem('orders', JSON.stringify(orders));
+
+    // Очищаем корзину
+    localStorage.removeItem('cart');
+
+    successElem.textContent = 'Замовлення успішно оформлено!';
+    successElem.style.display = 'block';
+
+    // Обновляем корзину и закрываем модалку
+    setTimeout(() => {
+      closeOrderModal();
+      displayCart();
+      showTab('orders');
+    }, 1500);
+  });
+
+  // Блокировка ввода недопустимых символов в полях формы заказа
+  ['order-name', 'order-surname', 'order-patronymic', 'order-city'].forEach(id => {
+    const el = document.getElementById(id);
+    el.addEventListener('input', e => {
+      e.target.value = e.target.value.replace(/[^A-Za-zА-Яа-яЁёЇїІіЄєҐґ\s'-]/g, '');
+    });
+  });
+  ['order-phone', 'order-branch'].forEach(id => {
+    const el = document.getElementById(id);
+    el.addEventListener('input', e => {
+      e.target.value = e.target.value.replace(/[^0-9]/g, '');
+    });
+  });
+
+  // Кнопка оформления заказа из корзины
+  document.getElementById('cart-checkout-btn').addEventListener('click', () => {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (!currentUser) {
+      alert('Будь ласка, увійдіть в акаунт, щоб оформити замовлення.');
+      showTab('auth');
+      return;
+    }
+    openOrderModal();
+  });
+
+  // Авторизация
+  const loginForm = document.getElementById('login-form');
+  const loginError = document.getElementById('login-error');
+  const loggedInInfo = document.querySelector('#auth .logged-in-info');
+  const userEmailDisplay = document.getElementById('user-email-display');
+  const logoutBtn = document.getElementById('logout-btn');
+  const togglePassword = document.getElementById('toggle-password');
+  const passwordInput = document.getElementById('password');
+
+  togglePassword.addEventListener('click', () => {
+    if (passwordInput.type === 'password') {
+      passwordInput.type = 'text';
+      togglePassword.textContent = 'Сховати пароль';
+    } else {
+      passwordInput.type = 'password';
+      togglePassword.textContent = 'Показати пароль';
+    }
+  });
+
+  loginForm.addEventListener('submit', e => {
+    e.preventDefault();
+    loginError.style.display = 'none';
+    loginError.textContent = '';
+
+    const email = loginForm.email.value.trim().toLowerCase();
+    const password = loginForm.password.value;
+
+    if (!email || !password) {
+      loginError.textContent = 'Введіть email і пароль.';
+      loginError.style.display = 'block';
+      return;
+    }
+
+    let users = JSON.parse(localStorage.getItem('users') || '[]');
+    let user = users.find(u => u.email === email);
+    if (!user) {
+      // Регистрация упрощённая
+      user = { email, password };
+      users.push(user);
+      localStorage.setItem('users', JSON.stringify(users));
+    } else {
+      if (user.password !== password) {
+        loginError.textContent = 'Неправильний пароль.';
+        loginError.style.display = 'block';
+        return;
+      }
+    }
+
+    localStorage.setItem('currentUser', JSON.stringify(user));
+    updateAuthUI();
+    alert('Ви увійшли в акаунт!');
+    showTab('home');
+  });
+
+  function updateAuthUI() {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (currentUser) {
+      loggedInInfo.style.display = 'block';
+      userEmailDisplay.textContent = currentUser.email;
+      loginForm.style.display = 'none';
+      forgotPasswordForm.style.display = 'none';
+    } else {
+      loggedInInfo.style.display = 'none';
+      loginForm.style.display = 'block';
+      forgotPasswordForm.style.display = 'none';
+      loginError.style.display = 'none';
+      loginError.textContent = '';
+    }
+  }
+
+  logoutBtn.addEventListener('click', () => {
+    localStorage.removeItem('currentUser');
+    updateAuthUI();
+  });
+
+  const forgotPasswordLink = document.getElementById('forgot-password-link');
+  const backToLoginLink = document.getElementById('back-to-login-link');
+  const forgotPasswordForm = document.getElementById('forgot-password-form');
+  const forgotError = document.getElementById('forgot-error');
+  const forgotSuccess = document.getElementById('forgot-success');
+  const forgotEmailInput = document.getElementById('forgot-email');
+  const forgotPasswordInput = document.getElementById('forgot-password');
+  const togglePasswordForgot = document.getElementById('toggle-password-forgot');
+
+  forgotPasswordLink.addEventListener('click', e => {
+    e.preventDefault();
+    loginForm.style.display = 'none';
+    forgotPasswordForm.style.display = 'block';
+    forgotError.style.display = 'none';
+    forgotSuccess.style.display = 'none';
+    forgotEmailInput.value = '';
+    forgotPasswordInput.value = '';
+  });
+
+  backToLoginLink.addEventListener('click', e => {
+    e.preventDefault();
+    forgotPasswordForm.style.display = 'none';
+    loginForm.style.display = 'block';
+    forgotError.style.display = 'none';
+    forgotSuccess.style.display = 'none';
+  });
+
+  togglePasswordForgot.addEventListener('click', () => {
+    if (forgotPasswordInput.type === 'password') {
+      forgotPasswordInput.type = 'text';
+      togglePasswordForgot.textContent = 'Сховати пароль';
+    } else {
+      forgotPasswordInput.type = 'password';
+      togglePasswordForgot.textContent = 'Показати пароль';
+    }
+  });
+
+  forgotPasswordForm.addEventListener('submit', e => {
+    e.preventDefault();
+    forgotError.style.display = 'none';
+    forgotSuccess.style.display = 'none';
+    const email = forgotEmailInput.value.trim().toLowerCase();
+    const newPassword = forgotPasswordInput.value;
+
+    if (!email) {
+      forgotError.textContent = 'Введіть email.';
+      forgotError.style.display = 'block';
+      return;
+    }
+
+    let users = JSON.parse(localStorage.getItem('users') || '[]');
+    let user = users.find(u => u.email === email);
+
+    if (!user) {
+      forgotError.textContent = 'Користувача з таким email не знайдено.';
+      forgotError.style.display = 'block';
+      return;
+    }
+
+    if (!newPassword) {
+      forgotError.textContent = 'Введіть новий пароль.';
+      forgotError.style.display = 'block';
+      return;
+    }
+
+    user.password = newPassword;
+    localStorage.setItem('users', JSON.stringify(users));
+    forgotSuccess.textContent = 'Пароль успішно оновлено! Тепер можете увійти.';
+    forgotSuccess.style.display = 'block';
+
+    setTimeout(() => {
+      forgotPasswordForm.style.display = 'none';
+      loginForm.style.display = 'block';
+      forgotSuccess.style.display = 'none';
+    }, 2000);
+  });
+
+function displayCart() {
+  const cartList = document.getElementById('cart-list');
+  const checkoutBtn = document.getElementById('cart-checkout-btn');
+  cartList.innerHTML = '';
+  let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+
+  if (cart.length === 0) {
+    cartList.innerHTML = '<p>Корзина порожня.</p>';
+    checkoutBtn.style.display = 'none';
+    return;
+  }
+
+  cart.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'cart-item';
+    div.textContent = `${item.name} — Розмір: ${item.size} — Кількість: ${item.quantity}`;
+
+    const delBtn = document.createElement('button');
+    delBtn.className = 'delete-button';
+    delBtn.textContent = 'Видалити';
+    delBtn.addEventListener('click', () => {
+      if (confirm(`Видалити товар "${item.name}" (розмір: ${item.size}) з корзини?`)) {
+        deleteFromCart(item.id, item.size);
       }
     });
 
-    // === Валидация формы заказа ===
-    function validateOrderForm(data) {
-      const nameReg = /^[^0-9]+$/; // без цифр
-      const phoneReg = /^[0-9]+$/;  // только цифры
+    div.appendChild(delBtn);
+    cartList.appendChild(div);
+  });
 
-      if (!nameReg.test(data.name)) {
-        return "Поле Ім'я не повинно містити цифр і не може бути порожнім.";
-      }
-      if (!nameReg.test(data.surname)) {
-        return "Поле Прізвище не повинно містити цифр і не може бути порожнім.";
-      }
-      if (!nameReg.test(data.patronymic)) {
-        return "Поле По-батькові не повинно містити цифр і не може бути порожнім.";
-      }
-      if (!phoneReg.test(data.phone)) {
-        return "Номер телефону повинен містити лише цифри.";
-      }
-      if (!nameReg.test(data.city)) {
-        return "Поле Місто не повинно містити цифр і не може бути порожнім.";
-      }
-      if (!phoneReg.test(data.branch)) {
-        return "Номер відділення повинен містити лише цифри.";
-      }
-      return null; // ошибок нет
-    }
+  checkoutBtn.style.display = 'block';
+}
 
-    // === Обработка отправки формы заказа ===
-    document.getElementById('order-form').addEventListener('submit', e => {
-      e.preventDefault();
 
-      const currentUser = localStorage.getItem('currentUser');
-      if (!currentUser) {
-        alert('Схоже, ви вийшли з акаунту. Будь ласка, увійдіть заново.');
-        showTab('auth');
-        closeOrderModal();
+function deleteFromCart(id, size) {
+  let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  cart = cart.filter(item => !(item.id === id && item.size === size));
+  localStorage.setItem('cart', JSON.stringify(cart));
+  displayCart();
+}
+
+
+function displayOrders() {
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  const ordersList = document.getElementById('orders-list');
+
+  if (!currentUser || !currentUser.email) {
+    ordersList.innerHTML = '<p>Будь ласка, увійдіть у свій акаунт, щоб переглянути замовлення.</p>';
+    return;
+  }
+
+  let orders = JSON.parse(localStorage.getItem('orders') || '[]');
+  console.log('Всi замовлення:', orders);
+
+  orders = orders.filter(o => o.userEmail === currentUser.email);
+  console.log('Замовлення користувача:', orders);
+
+  if (orders.length === 0) {
+    ordersList.innerHTML = '<p>Немає оформлених замовлень.</p>';
+    return;
+  }
+
+  ordersList.innerHTML = ''; // очищаємо перед додаванням
+
+  orders.forEach(order => {
+    if (!order.products || !Array.isArray(order.products)) return; // пропускаємо поламані замовлення
+
+    const orderDiv = document.createElement('div');
+    orderDiv.className = 'order-item';
+    orderDiv.style.border = '1px solid #ccc';
+    orderDiv.style.padding = '10px';
+    orderDiv.style.marginBottom = '15px';
+    orderDiv.style.borderRadius = '8px';
+
+    let html = `<strong>Замовлення №${order.id}</strong><br>`;
+    html += `<em>Ім'я:</em> ${order.name} ${order.surname} ${order.patronymic}<br>`;
+    html += `<em>Телефон:</em> ${order.phone}<br>`;
+    html += `<em>Місто:</em> ${order.city}<br>`;
+    html += `<em>Відділення:</em> ${order.branch}<br>`;
+    html += `<em>Товари:</em><ul>`;
+
+    order.products.forEach(p => {
+      html += `<li>${p.name} — Розмір: ${p.size || 'не вказано'} — ${p.quantity} шт.</li>`;
+    });
+
+    html += '</ul>';
+
+    // Добавляем кнопку удаления
+    html += `<button class="delete-order" data-id="${order.id}" style="
+      margin-top:10px; 
+      padding:5px 10px; 
+      background-color:#ff4444; 
+      color:white; 
+      border:none; 
+      border-radius:5px; 
+      cursor:pointer;
+    ">Видалити</button>`;
+
+    orderDiv.innerHTML = html;
+    ordersList.appendChild(orderDiv);
+  });
+
+  // После отрисовки всех заказов — добавляем обработчики на кнопки удаления
+  document.querySelectorAll('.delete-order').forEach(btn => {
+    btn.addEventListener('click', function () {
+      const orderId = parseInt(this.dataset.id);
+
+      if (!confirm('Ви впевнені, що хочете видалити це замовлення?')) {
         return;
       }
 
-      const data = {
-        product: document.getElementById('order-product').value,
-        name: document.getElementById('order-name').value.trim(),
-        surname: document.getElementById('order-surname').value.trim(),
-        patronymic: document.getElementById('order-patronymic').value.trim(),
-        phone: document.getElementById('order-phone').value.trim(),
-        city: document.getElementById('order-city').value.trim(),
-        branch: document.getElementById('order-branch').value.trim()
-      };
-
-      const errorMsg = validateOrderForm(data);
-      const errorElem = document.getElementById('order-error');
-      const successElem = document.getElementById('order-success');
-
-      if (errorMsg) {
-        errorElem.textContent = errorMsg;
-        errorElem.style.display = 'block';
-        successElem.style.display = 'none';
-        return;
-      }
-
-      // Сохраняем заказ с привязкой к email пользователя
-      let orders = JSON.parse(localStorage.getItem('orders')) || [];
-      orders.push({
-        ...data,
-        date: new Date().toISOString(),
-        userEmail: currentUser
-      });
+      let orders = JSON.parse(localStorage.getItem('orders') || '[]');
+      orders = orders.filter(o => o.id !== orderId);
       localStorage.setItem('orders', JSON.stringify(orders));
+      displayOrders(); // обновляем отображение после удаления
+    });
+  });
+}
 
-      errorElem.style.display = 'none';
-      successElem.textContent = 'Замовлення було подано в обробку, чекайте коли наші менеджери зв\'яжуться з вами.';
-      successElem.style.display = 'block';
 
-      e.target.reset();
+  // Функция переключения вкладок
+  const tabs = document.querySelectorAll('nav a');
+  const tabSections = document.querySelectorAll('main section.tab-section');
 
-      // Через 3 секунды закрыть модал и перейти к заказам
-      setTimeout(() => {
-        closeOrderModal();
-        showTab('cart');
-        loadOrders();
-      }, 3000);
+  function showTab(name) {
+    tabSections.forEach(sec => sec.style.display = 'none');
+    const target = document.getElementById(name);
+    if (target) target.style.display = 'block';
+
+    tabs.forEach(tab => tab.classList.remove('active'));
+    tabs.forEach(tab => {
+      if (tab.getAttribute('data-tab') === name) tab.classList.add('active');
     });
 
-    // === Загрузка заказов для текущего пользователя ===
-    function loadOrders() {
-      const ordersList = document.getElementById('orders-list');
-      const currentUser = localStorage.getItem('currentUser');
-      if (!currentUser) {
-        ordersList.innerHTML = '<p>Будь ласка, увійдіть, щоб бачити свої замовлення.</p>';
-        return;
-      }
+    if (name === 'home') displayHome();
+    if (name === 'cart') displayCart();
+    if (name === 'orders') displayOrders();
+    if (name === 'auth') updateAuthUI();
+  }
 
-      let orders = JSON.parse(localStorage.getItem('orders')) || [];
-      // Фильтруем по текущему пользователю
-      orders = orders.filter(o => o.userEmail === currentUser);
-
-      if (orders.length === 0) {
-        ordersList.innerHTML = '<p>Історія замовлень порожня.</p>';
-        return;
-      }
-
-      ordersList.innerHTML = orders.map((o, i) => `
-        <div class="order-item">
-          <strong>Замовлення №${i + 1}</strong><br>
-          Товар: ${o.product}<br>
-          Ім'я: ${o.name}<br>
-          Прізвище: ${o.surname}<br>
-          По-батькові: ${o.patronymic}<br>
-          Телефон: ${o.phone}<br>
-          Місто: ${o.city}<br>
-          Номер відділення: ${o.branch}<br>
-          Дата замовлення: ${new Date(o.date).toLocaleString('uk-UA')}<br>
-          <button class="delete-button" data-index="${i}">Видалити</button>
-        </div>
-      `).join('');
-
-      // Навешиваем удаление заказов
-      document.querySelectorAll('.delete-button').forEach(btn => {
-        btn.onclick = () => {
-          let currentOrders = JSON.parse(localStorage.getItem('orders')) || [];
-          // Только заказы текущего пользователя
-          let userOrders = currentOrders.filter(o => o.userEmail === currentUser);
-          const idx = +btn.getAttribute('data-index');
-          // Удаляем заказ пользователя
-          userOrders.splice(idx, 1);
-          // Обновляем общий массив заказов (сохраняем остальные)
-          const otherOrders = currentOrders.filter(o => o.userEmail !== currentUser);
-          localStorage.setItem('orders', JSON.stringify([...otherOrders, ...userOrders]));
-          loadOrders();
-        };
-      });
-    }
-
-    // === Авторизация ===
-    const loginForm = document.getElementById('login-form');
-    const loginError = document.getElementById('login-error');
-    const userEmailDisplay = document.getElementById('user-email-display');
-    const loggedInInfo = document.querySelector('.logged-in-info');
-    const logoutBtn = document.getElementById('logout-btn');
-
-    function updateAuthUI() {
-      const currentUser = localStorage.getItem('currentUser');
-      if (currentUser) {
-        // Показать инфо о вошедшем пользователе
-        loggedInInfo.style.display = 'block';
-        userEmailDisplay.textContent = currentUser;
-        loginForm.style.display = 'none';
-      } else {
-        loggedInInfo.style.display = 'none';
-        userEmailDisplay.textContent = '';
-        loginForm.style.display = 'block';
-      }
-    }
-
-    // Клик по кнопке выхода
-    logoutBtn.onclick = () => {
-      localStorage.removeItem('currentUser');
-      updateAuthUI();
-      alert('Ви вийшли з акаунту.');
-      showTab('home');
-    };
-
-    loginForm.addEventListener('submit', e => {
+  tabs.forEach(tab => {
+    tab.addEventListener('click', e => {
       e.preventDefault();
-      const email = document.getElementById('email').value.trim().toLowerCase();
-      const password = document.getElementById('password').value;
-
-      // Простая проверка — берем пользователей из localStorage
-      const users = JSON.parse(localStorage.getItem('users')) || [];
-      const foundUser = users.find(u => u.email === email);
-
-      if (!foundUser) {
-        loginError.textContent = 'Користувач з таким email не знайдений.';
-        loginError.style.display = 'block';
-        return;
-      }
-      if (foundUser.password !== password) {
-        loginError.textContent = 'Невірний пароль.';
-        loginError.style.display = 'block';
-        return;
-      }
-
-      // Успешный вход
-      localStorage.setItem('currentUser', email);
-      loginError.style.display = 'none';
-      loginForm.reset();
-      updateAuthUI();
-      alert('Вхід виконано успішно!');
-      showTab('home');
+      const tabName = tab.getAttribute('data-tab');
+      showTab(tabName);
     });
+  });
 
-    // Показать/скрыть пароль
-    const togglePassword = document.getElementById('toggle-password');
-    const passwordInput = document.getElementById('password');
-    togglePassword.onclick = () => {
-      if(passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        togglePassword.textContent = 'Сховати пароль';
-      } else {
-        passwordInput.type = 'password';
-        togglePassword.textContent = 'Показати пароль';
-      }
-    };
+  // Логика клика по логотипу - переход на главную вкладку
+  document.getElementById('logo-link').addEventListener('click', e => {
+    e.preventDefault();
+    showTab('home');
+  });
 
-    // === Восстановление пароля ===
-    const forgotLink = document.getElementById('forgot-password-link');
-    const backToLoginLink = document.getElementById('back-to-login-link');
-    const forgotForm = document.getElementById('forgot-password-form');
-    const loginFormElem = document.getElementById('login-form');
-    const forgotError = document.getElementById('forgot-error');
-    const forgotSuccess = document.getElementById('forgot-success');
-
-    forgotLink.onclick = e => {
-      e.preventDefault();
-      loginFormElem.style.display = 'none';
-      forgotForm.style.display = 'block';
-      loginError.style.display = 'none';
-      forgotError.style.display = 'none';
-      forgotSuccess.style.display = 'none';
-    };
-
-    backToLoginLink.onclick = e => {
-      e.preventDefault();
-      loginFormElem.style.display = 'block';
-      forgotForm.style.display = 'none';
-      forgotError.style.display = 'none';
-      forgotSuccess.style.display = 'none';
-    };
-
-    forgotForm.addEventListener('submit', e => {
-      e.preventDefault();
-      const email = document.getElementById('forgot-email').value.trim().toLowerCase();
-      const users = JSON.parse(localStorage.getItem('users')) || [];
-      const user = users.find(u => u.email === email);
-
-      if (!user) {
-        forgotError.textContent = 'Користувач з таким email не знайдений.';
-        forgotError.style.display = 'block';
-        forgotSuccess.style.display = 'none';
-        return;
-      }
-
-      forgotError.style.display = 'none';
-      forgotSuccess.textContent = `Пароль для ${email} : ${user.password}`;
-      forgotSuccess.style.display = 'block';
-    });
-
-    // === Инициализация ===
-
-    // Для теста — если нет пользователей, создадим одного
-    if (!localStorage.getItem('users')) {
-      localStorage.setItem('users', JSON.stringify([
-        {email: 'test@example.com', password: '123456'}
-      ]));
-    }
-
-    displayHome();
+  // Инициализация страницы
+  window.addEventListener('load', () => {
     showTab('home');
     updateAuthUI();
-
-  </script>
+  });
+</script>
 
 </body>
 </html>

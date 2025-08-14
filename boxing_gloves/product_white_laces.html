@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Winning Білі (Шнурки)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --left-container-top: 15px;          /* 👈 регулируй вертикальное положение левого контейнера */
+      --left-container-left: -400px;      /* 👈 регулируй горизонтальное положение левого контейнера */
+      --img-max-height: 800px;            /* 👈 регулируй высоту картинки */
+      --description-max-height: none;     /* 👈 при необходимости ограничь высоту описания */
+      --sidebar-top: 60px;                /* 👈 регулируй вертикальное положение сайдбара */
+      --sidebar-left: 1120px;             /* 👈 регулируй горизонтальное положение сайдбара */
+      --sidebar-max-height: none;         /* 👈 можно ограничить высоту сайдбара */
+    }
+
+    body {
+      font-family: 'Open Sans', sans-serif;
+      margin: 0;
+      background-color: #f3f3f3;
+      background-image: url(/images/);
+      background-repeat: no-repeat;
+      background-position: center top;
+      background-size: cover;
+    }
+
+    header {
+      background-color: black;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo {
+      height: 65px;
+      cursor: pointer;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+      color: white;
+      user-select: none;
+    }
+
+    nav {
+      background-color: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px 0;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      padding: 10px 18px;
+      border-radius: 4px;
+      font-weight: bold;
+      font-size: 18px;
+      transition: background-color 0.3s ease;
+    }
+
+    nav a:hover {
+      background-color: rgb(80, 80, 80);
+    }
+
+    #language-selector {
+      padding: 6px 10px;
+      font-size: 16px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .main {
+      display: flex;
+      justify-content: center;
+      padding: 40px;
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      position: relative;
+    }
+
+    .left-container {
+      position: absolute;
+      width: 1000px;
+      top: var(--left-container-top);
+      left: var(--left-container-left);
+    }
+
+    .left-container h1 {
+      font-size: 28px;
+      margin: 0 0 10px 0;
+      user-select: none;
+      color: #333;
+    }
+
+    .product-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: white;
+      border-radius: 12px;
+      padding: 0;
+      width: 100%;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      overflow: visible;
+    }
+
+    .product-img {
+      width: auto;
+      max-width: calc(100% + 120px);
+      margin-left: -100px;
+      max-height: var(--img-max-height);
+      object-fit: contain;
+      border-radius: 12px;
+      display: block;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    /* Кнопки переключения (стрелки) */
+    .carousel-button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(0,0,0,0.4);
+      border: none;
+      color: white;
+      font-size: 32px;
+      width: 45px;
+      height: 70px;
+      cursor: pointer;
+      border-radius: 6px;
+      user-select: none;
+      transition: background-color 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      z-index: 10;
+    }
+    .carousel-button:hover {
+      background-color: rgba(0,0,0,0.7);
+    }
+    .carousel-button:active {
+      background-color: rgba(0,0,0,0.9);
+    }
+    .carousel-button.prev {
+      left: 10px;
+    }
+    .carousel-button.next {
+      right: 10px;
+    }
+
+    .thumbnail-gallery {
+      margin-top: 12px;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      max-width: 100%;
+      padding-bottom: 8px;
+      user-select: none;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .thumbnail-gallery img {
+      height: 60px;
+      cursor: pointer;
+      border-radius: 6px;
+      opacity: 0.5;
+      border: 2px solid transparent;
+      transition: opacity 0.3s, border-color 0.3s;
+      flex-shrink: 0;
+    }
+
+    .thumbnail-gallery img:hover {
+      opacity: 0.8;
+    }
+
+    .thumbnail-gallery img.active {
+      opacity: 1;
+      border-color: black;
+    }
+
+    .description-container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      font-size: 17px;
+      line-height: 1.6;
+      color: #333;
+      white-space: pre-line;
+      margin-top: 15px;
+      max-height: var(--description-max-height);
+      overflow-y: auto;
+    }
+
+    .sidebar {
+      position: absolute;
+      top: var(--sidebar-top);
+      left: var(--sidebar-left);
+      background-color: white;
+      border-radius: 12px;
+      padding: 15px;
+      width: 500px;
+      font-size: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      align-items: flex-start;
+      flex-shrink: 0;
+      max-height: var(--sidebar-max-height);
+    }
+
+    .sidebar h1 {
+      font-size: 20px;
+      margin: 0 0 8px 0;
+    }
+
+    .price-order-container {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .size-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .size-button {
+      padding: 10px 14px;
+      border: 2px solid black;
+      border-radius: 6px;
+      background-color: white;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      user-select: none;
+      min-width: 55px;
+      text-align: center;
+    }
+
+    .size-button:hover,
+    .size-button.selected {
+      background-color: black;
+      color: white;
+      transform: scale(1.1);
+      border-color: black;
+    }
+
+    .order-buttons-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .order-button {
+      flex-grow: 1;
+      padding: 10px;
+      background-color: black;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      transition: all 0.2s ease;
+    }
+
+    .order-button:hover {
+      background-color: #222;
+      transform: scale(1.05);
+    }
+
+    #add-to-cart-btn {
+      background-color: black;
+      border: none;
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      cursor: pointer;
+      color: white;
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      transition: background-color 0.3s ease;
+    }
+
+    #add-to-cart-btn:hover {
+      background-color: #222;
+    }
+
+    #notification {
+      margin-top: 10px;
+      color: green;
+      font-weight: bold;
+      text-align: center;
+      display: none;
+      width: 100%;
+    }
+
+    .contact-info {
+      background-color: white;
+      border-radius: 12px;
+      padding: 15px;
+      font-size: 14px;
+      line-height: 1.4;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      margin-top: 20px;
+      width: 100%;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .contact-info a {
+      color: black;
+      text-decoration: underline;
+    }
+
+    /* Адаптив для мобильных */
+    @media (max-width: 768px) {
+      .main {
+        flex-direction: column;
+        padding: 20px;
+      }
+
+      .left-container,
+      .sidebar {
+        position: static;
+        width: 100%;
+        max-width: 100%;
+      }
+
+      .product-img {
+        margin-left: 0;
+        max-width: 100%;
+        height: auto;
+      }
+
+      .sidebar {
+        margin-top: 20px;
+      }
+
+      :root {
+        --left-container-top: 0px;
+        --left-container-left: 0px;
+        --sidebar-top: 0px;
+        --sidebar-left: 0px;
+        --img-max-height: 400px; /* 👈 мобильная версия – меньше высота */
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html"><img src="../images/tigryss_logo.png" alt="Tigryss Logo" class="logo" /></a>
+    <h1>tigryss_boxing</h1>
+  </header>
+
+  <nav>
+    <a href="index.html" id="nav-home">Головна</a>
+    <a href="index.html" id="nav-catalog">Каталог</a>
+    <a href="orders.html" id="nav-orders">Мої замовлення</a>
+    <select id="language-selector" aria-label="Вибір мови">
+      <option value="ua">UA</option>
+      <option value="ru">RU</option>
+      <option value="pl">PL</option>
+    </select>
+  </nav>
+
+  <div class="main">
+    <div class="left-container">
+      <h1 id="product-title">Рукавички Winning (шнурівка), білий колір</h1>
+      <div class="product-card">
+        <img src="../images/white_laces/white_laces_invisible.png" alt="Winning білі на шнурках" class="product-img" id="carousel-image" />
+        <button class="carousel-button prev" id="prev-btn" aria-label="Попереднє зображення">&#8592;</button>
+        <button class="carousel-button next" id="next-btn" aria-label="Наступне зображення">&#8594;</button>
+        <div class="thumbnail-gallery" id="thumbnail-gallery"></div>
+      </div>
+      <div class="description-container" id="product-description">
+        Ключові особливості: ідеальна посадка, захист від ударів, вентиляція, надійна застібка, універсальність. Матеріал: екологічна шкіра. Розміри: 10, 12, 14, 16 унцій. Підходить для боксу, кікбоксингу, тайського боксу.
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <div class="price-order-container">
+        <h1 id="price-title">Ціна: <span id="price">5990 грн</span></h1>
+        <label id="choose-size-label" for="size-buttons">Оберіть розмір:</label>
+        <div class="size-buttons" id="size-buttons">
+          <button class="size-button selected" data-size="12" data-price="5990">12oz</button>
+          <button class="size-button" data-size="14" data-price="6390">14oz</button>
+          <button class="size-button" data-size="16" data-price="6790">16oz</button>
+        </div>
+
+        <div class="order-buttons-container">
+          <button class="order-button" id="order-button">Оформити замовлення</button>
+          <button id="add-to-cart-btn" title="Додати в кошик">🛒</button>
+        </div>
+
+        <div id="notification">Товар додано в кошик!</div>
+      </div>
+
+      <div class="contact-info" id="contact-info">
+        <strong id="delivery-title">Доставка:</strong><br />
+        <span id="delivery-details">1–2 дні по Україні (якщо товар в наявності)<br />14–20 днів — під замовлення</span><br /><br />
+        <strong id="contacts-title">Контакти:</strong><br />
+        Телефон: +380 50 960 32 24<br />
+        Telegram: <a href="https://t.me/Tigryss" target="_blank">@Tigryss</a><br />
+        Наш канал: <a href="https://t.me/tigryssboxing" target="_blank">t.me/tigryssboxing</a>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const images = [
+    '../images/white_laces/white_laces_1-Photoroom.png',
+    '../images/white_laces/white_laces_2-Photoroom.png',
+    '../images/white_laces/white_laces_3-Photoroom.png',
+    '../images/white_laces/white_laces_4-Photoroom.png',
+    '../images/size_table-Photoroom.png'
+  ];
+
+  let currentIndex = 0;
+  const carouselImage = document.getElementById('carousel-image');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+  const thumbnailGallery = document.getElementById('thumbnail-gallery');
+
+  function updateImage(index = currentIndex) {
+    currentIndex = index;
+    carouselImage.src = images[currentIndex];
+    updateActiveThumbnail();
+  }
+
+  prevBtn.addEventListener('click', () => {
+    currentIndex = (currentIndex - 1 + images.length) % images.length;
+    updateImage();
+  });
+
+  nextBtn.addEventListener('click', () => {
+    currentIndex = (currentIndex + 1) % images.length;
+    updateImage();
+  });
+
+  function createThumbnails() {
+    images.forEach((src, i) => {
+      const thumb = document.createElement('img');
+      thumb.src = src;
+      thumb.alt = `Thumbnail ${i + 1}`;
+      thumb.addEventListener('click', () => updateImage(i));
+      thumbnailGallery.appendChild(thumb);
+    });
+  }
+
+  function updateActiveThumbnail() {
+    const thumbs = thumbnailGallery.querySelectorAll('img');
+    thumbs.forEach((thumb, i) => {
+      thumb.classList.toggle('active', i === currentIndex);
+    });
+  }
+
+  createThumbnails();
+  updateImage();
+
+  const sizeButtons = document.querySelectorAll('.size-button');
+  const priceDisplay = document.getElementById('price');
+  const notification = document.getElementById('notification');
+  const orderBtn = document.getElementById('order-button');
+  const addToCartBtn = document.getElementById('add-to-cart-btn');
+
+  let selectedSize = '12';
+  let selectedPrice = 5990;
+  let currentCurrency = 'UAH';
+  let conversionRate = 0.1; // 1 грн = 0.11 zł
+
+  function updatePriceDisplay() {
+    if (currentCurrency === 'UAH') {
+      priceDisplay.textContent = selectedPrice + ' грн';
+    } else if (currentCurrency === 'PLN') {
+      const converted = Math.round(selectedPrice * conversionRate);
+      priceDisplay.textContent = converted + ' zł';
+    }
+  }
+
+  sizeButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      sizeButtons.forEach(btn => btn.classList.remove('selected'));
+      button.classList.add('selected');
+      selectedSize = button.getAttribute('data-size');
+      selectedPrice = parseInt(button.getAttribute('data-price'));
+      updatePriceDisplay();
+    });
+  });
+
+  function addProductToCart() {
+    const priceText = priceDisplay.textContent;
+    const product = {
+      id: 'white_helmet',
+      name: document.getElementById('product-title').textContent,
+      size: selectedSize + 'one size',
+      price: priceText,
+      quantity: 1
+    };
+
+    let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
+    const existingIndex = cart.findIndex(item => item.id === product.id && item.size === product.size);
+    if (existingIndex !== -1) {
+      cart[existingIndex].quantity += 1;
+    } else {
+      cart.push(product);
+    }
+
+    localStorage.setItem('cartItems', JSON.stringify(cart));
+    notification.style.display = 'block';
+    setTimeout(() => notification.style.display = 'none', 1500);
+  }
+
+  addToCartBtn.addEventListener('click', addProductToCart);
+
+  orderBtn.addEventListener('click', () => {
+    alert(`Ви оформляєте замовлення:\n\n${document.getElementById('product-title').textContent}\nРозмір: ${selectedSize}oz\nЦіна: ${priceDisplay.textContent}`);
+  });
+
+  // === Перевод контента ===
+  const translations = {
+    ua: {
+      navHome: "Головна",
+      navCatalog: "Каталог",
+      navOrders: "Мої замовлення",
+      productTitle: "Рукавички Winning (шнурівка), білий колір",
+      description: "Ключові особливості: ідеальна посадка, захист від ударів, вентиляція, надійна застібка, універсальність. Матеріал: екологічна шкіра. Розміри: 10, 12, 14, 16 унцій. Підходить для боксу, кікбоксингу, тайського боксу.",
+      priceTitle: "Ціна:",
+      chooseSize: "Оберіть розмір:",
+      orderButton: "Оформити замовлення",
+      addedToCart: "Товар додано в кошик!",
+      deliveryTitle: "Доставка:",
+      deliveryDetails: "1–2 дні по Україні (якщо товар в наявності)<br>14–20 днів — під замовлення",
+      contactsTitle: "Контакти:"
+    },
+    ru: {
+      navHome: "Главная",
+      navCatalog: "Каталог",
+      navOrders: "Мои заказы",
+      productTitle: "Перчатки Winning (шнуровка), белый цвет",
+      description: "Ключевые особенности: идеальная посадка, защита от ударов, вентиляция, надёжная застёжка, универсальность. Материал: экокожа. Размеры: 10, 12, 14, 16 унций. Подходят для бокса, кикбоксинга, тайского бокса.",
+      priceTitle: "Цена:",
+      chooseSize: "Выберите размер:",
+      orderButton: "Оформить заказ",
+      addedToCart: "Товар добавлен в корзину!",
+      deliveryTitle: "Доставка:",
+      deliveryDetails: "1–2 дня по Украине (если товар в наличии)<br>14–20 дней — под заказ",
+      contactsTitle: "Контакты:"
+    },
+    pl: {
+      navHome: "Strona główna",
+      navCatalog: "Katalog",
+      navOrders: "Moje zamówienia",
+      productTitle: "Rękawice Winning (sznurowane), kolor biały",
+      description: "Główne cechy: idealne dopasowanie, ochrona przed uderzeniami, wentylacja, solidne zapięcie, uniwersalność. Materiał: eko skóra. Rozmiary: 10, 12, 14, 16 uncji. Do boksu, kickboxingu, muay thai.",
+      priceTitle: "Cena:",
+      chooseSize: "Wybierz rozmiar:",
+      orderButton: "Złóż zamówienie",
+      addedToCart: "Produkt dodano do koszyka!",
+      deliveryTitle: "Dostawa:",
+      deliveryDetails: "1–2 dni na Ukrainie (jeśli dostępny)<br>14–20 dni — na zamówienie",
+      contactsTitle: "Kontakt:"
+    }
+  };
+
+  const languageSelector = document.getElementById('language-selector');
+  languageSelector.addEventListener('change', () => {
+    const lang = languageSelector.value;
+    const t = translations[lang];
+
+    document.getElementById('nav-home').textContent = t.navHome;
+    document.getElementById('nav-catalog').textContent = t.navCatalog;
+    document.getElementById('nav-orders').textContent = t.navOrders;
+    document.getElementById('product-title').textContent = t.productTitle;
+    document.getElementById('product-description').innerHTML = t.description;
+    document.getElementById('price-title').childNodes[0].textContent = t.priceTitle + " ";
+    document.getElementById('choose-size-label').textContent = t.chooseSize;
+    document.getElementById('order-button').textContent = t.orderButton;
+    document.getElementById('notification').textContent = t.addedToCart;
+    document.getElementById('delivery-title').textContent = t.deliveryTitle;
+    document.getElementById('delivery-details').innerHTML = t.deliveryDetails;
+    document.getElementById('contacts-title').textContent = t.contactsTitle;
+
+    if (lang === 'pl') {
+      currentCurrency = 'PLN';
+    } else {
+      currentCurrency = 'UAH';
+    }
+    updatePriceDisplay();
+  });
+</script>
