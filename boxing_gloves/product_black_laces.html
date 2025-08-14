@@ -7,13 +7,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --left-container-top: 15px;          /* 👈 регулируй вертикальное положение левого контейнера */
-      --left-container-left: -400px;      /* 👈 регулируй горизонтальное положение левого контейнера */
-      --img-max-height: 800px;            /* 👈 регулируй высоту картинки */
-      --description-max-height: none;     /* 👈 при необходимости ограничь высоту описания */
-      --sidebar-top: 60px;                /* 👈 регулируй вертикальное положение сайдбара */
-      --sidebar-left: 1120px;             /* 👈 регулируй горизонтальное положение сайдбара */
-      --sidebar-max-height: none;         /* 👈 можно ограничить высоту сайдбара */
+      --left-container-top: 15px;         
+      --left-container-left: -400px;      
+      --img-max-height: 800px;            
+      --description-max-height: none;     
+      --sidebar-top: 60px;                
+      --sidebar-left: 1120px;            
+      --sidebar-max-height: none;         
     }
 
     body {
@@ -131,7 +131,6 @@
       pointer-events: none;
     }
 
-    /* Кнопки переключения (стрелки) */
     .carousel-button {
       position: absolute;
       top: 50%;
@@ -345,7 +344,6 @@
       text-decoration: underline;
     }
 
-    /* Адаптив для мобильных */
     @media (max-width: 768px) {
       .main {
         flex-direction: column;
@@ -374,7 +372,7 @@
         --left-container-left: 0px;
         --sidebar-top: 0px;
         --sidebar-left: 0px;
-        --img-max-height: 400px; /* 👈 мобильная версия – меньше высота */
+        --img-max-height: 400px; 
       }
     }
   </style>
@@ -499,7 +497,7 @@
   let selectedSize = '12';
   let selectedPrice = 5990;
   let currentCurrency = 'UAH';
-  let conversionRate = 0.1; // 1 грн = 0.11 zł
+  let conversionRate = 0.1; 
 
   function updatePriceDisplay() {
     if (currentCurrency === 'UAH') {
@@ -549,7 +547,6 @@
     alert(`Ви оформляєте замовлення:\n\n${document.getElementById('product-title').textContent}\nРозмір: ${selectedSize}oz\nЦіна: ${priceDisplay.textContent}`);
   });
 
-  // === Перевод контента ===
   const translations = {
     ua: {
       navHome: "Головна",

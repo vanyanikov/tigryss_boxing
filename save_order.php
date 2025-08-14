@@ -1,11 +1,8 @@
 <?php
-// save_order.php
 header('Content-Type: application/json');
 
-// Подключение к БД
 require_once 'db.php';
 
-// Читаем входящие данные
 $data = json_decode(file_get_contents('php://input'), true);
 
 if (!$data || empty($data['first_name']) || empty($data['last_name']) || empty($data['phone']) || empty($data['city']) || empty($data['department']) || empty($data['items'])) {
@@ -19,14 +16,12 @@ $patronymic = $data['patronymic'] ?? '';
 $phone = $data['phone'];
 $city = $data['city'];
 $department = $data['department'];
-$userId = $data['user_id'] ?? null; // Если пользователь авторизован
+$userId = $data['user_id'] ?? null;
 $items = $data['items'];
 
 try {
-    // Отключаем автокоммит для транзакции
     $conn->begin_transaction();
 
-    // Сохраняем заказ
     $stmt = $conn->prepare("
         INSERT INTO orders (user_id, first_name, last_name, patronymic, phone, city, department, created_at)
         VALUES (?, ?, ?, ?, ?, ?, ?, NOW())
@@ -36,7 +31,6 @@ try {
     $orderId = $stmt->insert_id;
     $stmt->close();
 
-    // Сохраняем товары заказа
     $itemStmt = $conn->prepare("
         INSERT INTO order_items (order_id, product_id, quantity, price)
         VALUES (?, ?, ?, ?)
@@ -50,7 +44,6 @@ try {
     }
     $itemStmt->close();
 
-    // Завершаем транзакцию
     $conn->commit();
 
     echo json_encode(['success' => true, 'message' => 'Заказ успешно оформлен!']);
